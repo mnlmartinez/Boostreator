@@ -1,0 +1,21 @@
+group 'Boostreator'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+ext.junitVersion = '4.12'
+ext.seleniumVersion = '3.6.0'
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version:junitVersion
+    compile group: 'org.seleniumhq.selenium', name: 'selenium-firefox-driver', version:seleniumVersion
+    compile group: 'org.seleniumhq.selenium', name: 'selenium-chrome-driver', version:seleniumVersion
+    compile group: 'org.seleniumhq.selenium', name: 'selenium-api', version:seleniumVersion
+    compile group: 'org.seleniumhq.selenium', name: 'selenium-java', version:seleniumVersion
+}
