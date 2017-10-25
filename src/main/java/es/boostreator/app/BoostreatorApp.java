@@ -11,12 +11,10 @@ public class BoostreatorApp {
         WebDriver driver = WebDriverFactory.get(WebDriverFactory.CHROME);
 
         driver.get("http://www.google.com");
-
         WebElement element = driver.findElement(By.name("q"));
         System.out.println(element.getText());
         element.sendKeys("Universidad Politécnia de Valencia");
         System.out.println(element.getText());
-
         element.submit();
     }
 }
