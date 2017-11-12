@@ -1,28 +1,25 @@
-package es.boostreator.model;
+package es.boostreator.domain.model;
+
+import es.boostreator.domain.model.enums.Brand;
+import es.boostreator.domain.model.enums.Site;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class Product {
 
-    private Site site;
     private String type;
     private String model;
-    private String brand;
-    private Double price;
+    private Brand brand;
+    private Map<Site, Double> price;
 
-    public Product(Site site, String type, String model, String brand, Double price) {
-        this.site = site;
+    public Product(String type, String model, Brand brand) {
         this.type = type;
         this.model = model;
         this.brand = brand;
-        this.price = price;
+        this.price = new HashMap<>();
     }
 
-    public Site getSite() {
-        return site;
-    }
-
-    public void setSite(Site site) {
-        this.site = site;
-    }
 
     public String getType() {
         return type;
@@ -40,20 +37,19 @@ public class Product {
         this.model = model;
     }
 
-    public String getBrand() {
+    public Brand getBrand() {
         return brand;
     }
 
-    public void setBrand(String brand) {
+    public void setBrand(Brand brand) {
         this.brand = brand;
     }
 
-    public Double getPrice() {
+    public Map<Site, Double> getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(Map<Site, Double> price) {
         this.price = price;
     }
-
 }
