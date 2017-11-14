@@ -9,12 +9,14 @@ public class DriverFactory {
     private static Driver driver = null;
 
     public static Driver get() {
-        if (driver != null) driver.quit();
-        driver = getChromeDriver();
+        if (driver == null) {
+            driver = getChromeDriver();
+            Runtime.getRuntime().addShutdownHook(new Thread(DriverFactory::close));
+        }
         return driver;
     }
 
-    public static void close(){
+    private static void close() {
         if (driver != null) {
             driver.quit();
             driver = null;
@@ -25,7 +27,7 @@ public class DriverFactory {
         String path = "src/main/resources/" + getSO() + "/chromedriver" + ("win".equals(getSO()) ? ".exe" : "");
         System.setProperty("webdriver.chrome.driver", path);
         ChromeOptions options = new ChromeOptions();
-        options.addArguments("--start-maximized");
+        options.addArguments("window-size=1366,768");
         return new Driver(new ChromeDriver(options));
     }
 

@@ -6,12 +6,15 @@ import es.boostreator.domain.model.enums.Site;
 
 public class CoffeeMachineDaoImp implements CoffeeMachineDao {
 
-    private CoffeeMachineSiteDao coffeeMachineFnacDAO = new CoffeeMachineFnacDaoImp();
+    private CoffeeMachineSiteDao coffeeMachineFnacDao = new CoffeeMachineFnacDaoImp();
+    private CoffeeMachineSiteDao coffeeMachineECIDao = new CoffeeMachineECIDaoImp();
 
-    public CoffeeMachineSiteDao getCoffeeMachineDAO(Site site) {
+    public CoffeeMachineSiteDao getCoffeeMachineDao(Site site) {
         switch (site) {
             case FNAC:
-                return this.coffeeMachineFnacDAO;
+                return this.coffeeMachineFnacDao;
+            case ELCORTEINGLES:
+                return this.coffeeMachineECIDao;
             default:
                 return null;
         }

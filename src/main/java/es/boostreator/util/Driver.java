@@ -12,18 +12,6 @@ public class Driver {
         this.driver = driver;
     }
 
-    public void waitPageLoad() {
-        try {
-            while (true) {
-                Thread.sleep(1000);
-                if ((Boolean) ((JavascriptExecutor) driver)
-                        .executeScript("return jQuery.active == 0")) break;
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
     public void search(WebElement element, String text) {
         element.sendKeys(text);
         element.submit();
@@ -45,11 +33,11 @@ public class Driver {
         }
     }
 
-    public void close() {
-        this.driver.close();
+    public WebDriver getDriver() {
+        return this.driver;
     }
 
-    public void quit() {
+    void quit() {
         this.driver.quit();
     }
 

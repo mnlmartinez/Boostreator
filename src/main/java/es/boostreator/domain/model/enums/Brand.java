@@ -28,7 +28,15 @@ public enum Brand {
     }
 
     public boolean isEqualTo(String other) {
-        return other != null && this.name().toUpperCase().equals(other.toUpperCase().trim());
+        return other != null &&
+                this.name()
+                        .toUpperCase()
+                        .equals(other
+                                .trim()
+                                .toUpperCase()
+                                .replace("'", "")
+                                .replace(" ", "")
+                        );
     }
 
     public static Brand getByName(String brandName) {
@@ -40,13 +48,18 @@ public enum Brand {
     }
 
     public static Brand getByProductTitle(String text) {
-        text = text.replace("'", "").replace(" ", "");
+        Brand[] brands = Brand.values();
+        text = text
+                .trim()
+                .toUpperCase()
+                .replace("'", "")
+                .replace(" ", "");
         try {
-            Brand[] brands = Brand.values();
-            for (Brand brand : brands)
-                if (text.toUpperCase().contains(brand.name()))
-                    return brand;
-        } catch (IllegalArgumentException ignored) { }
+            for (Brand brand : brands) if (text.contains(brand.name())) return brand;
+        } catch (IllegalArgumentException ignored) {
+
+        }
+
         return null;
     }
 

@@ -8,7 +8,6 @@ import es.boostreator.util.AppLogger;
 import es.boostreator.util.Driver;
 import es.boostreator.util.DriverFactory;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 
@@ -16,10 +15,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
-public class CoffeeMachineFnacDaoImp implements CoffeeMachineSiteDao {
+public class CoffeeMachineECIDaoImp implements CoffeeMachineSiteDao {
 
     private Driver driver = DriverFactory.get();
-    private Site site = Site.FNAC;
+    private Site site = Site.ELCORTEINGLES;
 
     private List<SiteProduct> siteProducts;
     private int maxRs;
@@ -31,48 +30,50 @@ public class CoffeeMachineFnacDaoImp implements CoffeeMachineSiteDao {
 
         driver.get(site.getUrl());
 
-        WebElement closeCookies = driver.findElement(By.className("js-Cnilbar-close"));
-        if (closeCookies != null) closeCookies.click();
-
-        WebElement searchInput = driver.findElement(By.id("Fnac_Search"));
+        WebElement searchInput = driver.findElement(By.id("search-box"));
         if (searchInput == null) return error("Search input not found");
         driver.search(searchInput, product);
-        this.waitPageLoad();
-
-        WebElement visualButton = driver.findElement(By.className("mosaicButton"));
-        if (visualButton != null) {
-            visualButton.click();
-            this.waitPageLoad();
-        }
+        this.waitPageLoad(1);
 
         if (brand != null && !this.selectBrand(brand)) return error("Filter brand not found");
 
         this.extractProducts();
-        WebElement next = driver.findElement(By.className("actionNext"));
+        WebElement next = driver.findElement(By.xpath("//a[@rel='next']"));
         while (next != null && next.isDisplayed() && !limit()) {
             next.click();
-            this.waitPageLoad();
+            this.waitPageLoad(1);
             this.extractProducts();
-            next = driver.findElement(By.className("actionNext"));
+            next = driver.findElement(By.xpath("//a[@rel='next']"));
         }
 
         return siteProducts;
     }
 
     private boolean selectBrand(Brand brand) {
-        WebElement filterButton = driver.findElement(By.className("js-toggleFilters-more"));
-        if (filterButton != null) {
-            filterButton.click();
-            this.waitPageLoad();
-        }
-
-        List<WebElement> brands = driver.findElements(By.className("Filters-choice"));
-        WebElement brandFound = this.searchBrand(brands, brand);
+        List<WebElement> brands = driver.findElements(By.cssSelector("ul.dimensions > li > a.event.facet-popup"));
+        WebElement brandFound = searchBrand(brands, brand);
 
         if (brandFound == null) return false;
 
-        brandFound.click();
-        this.waitPageLoad();
+        String brandName = brandFound.getAttribute("title");
+
+        if (!brandFound.isDisplayed()) {
+            driver.findElement(By.cssSelector("#filters > li > ul > li > a.more")).click();
+            this.waitPageLoad(2);
+            driver.findElement(By.id("mdl-input")).sendKeys(brandName);
+            this.waitPageLoad(1);
+
+            brandFound = driver.findElement(By.cssSelector("#mdl-result-search > div.abc-box-e > a"));
+            if (brandFound == null) return false;
+
+            brandFound.click();
+            this.waitPageLoad(1);
+            driver.findElement(By.id("mdl-url-filter")).click();
+        } else {
+            brandFound.click();
+        }
+
+        this.waitPageLoad(1);
         return true;
     }
 
@@ -84,24 +85,24 @@ public class CoffeeMachineFnacDaoImp implements CoffeeMachineSiteDao {
     }
 
     private void extractProducts() {
-        List<WebElement> elements = driver.findElements(By.className("Article-mosaicItem"));
+        List<WebElement> elements = driver.
+                findElements(By.cssSelector("div#product-list> ul > li > div.product-preview"));
 
         for (WebElement element : elements) {
             String type;
             String priceT;
             String model = "";
 
-            if (limit()) break;
+            if(limit()) break;
 
             try {
-                type = element.findElement(By.className("thumbnail-sub")).getText();
-                model = element.findElement(By.className("thumbnail-titleLink")).getText();
-                priceT = element.findElement(By.className("thumbnail-price")).getText();
+                type = "";
+                model = element.findElement(By.className("js-product-click")).getAttribute("title");
+                priceT = element.findElement(By.cssSelector("div.info > div.product-price > span.current")).getText();
             } catch (NoSuchElementException ex) {
                 AppLogger.log(Level.WARNING, "Error with " + model + " -- Not added to list");
                 continue;
             }
-
             Brand brand = extractBrand(element);
             Double price = Double.valueOf(priceT
                     .split("€")[0]
@@ -114,12 +115,10 @@ public class CoffeeMachineFnacDaoImp implements CoffeeMachineSiteDao {
     }
 
     private Brand extractBrand(WebElement element) {
-        String title = element.findElement(By.className("thumbnail-titleLink")).getText();
+        String title = element.findElement(By.className("js-product-click")).getAttribute("title");
 
         try {
-            String brandName = element
-                    .findElement(By.className("thumbnail-sub"))
-                    .findElement(By.xpath("./descendant::span/descendant::a")).getText();
+            String brandName = element.findElement(By.className("brand")).getText();
             Brand brand = Brand.getByName(brandName);
             if (brand != null) return brand;
         } catch (NoSuchElementException ignored) {
@@ -134,13 +133,9 @@ public class CoffeeMachineFnacDaoImp implements CoffeeMachineSiteDao {
         return null;
     }
 
-    private void waitPageLoad() {
+    private void waitPageLoad(long sec) {
         try {
-            while (true) {
-                Thread.sleep(1000);
-                if ((Boolean) ((JavascriptExecutor) driver.getDriver())
-                        .executeScript("return jQuery.active == 0")) break;
-            }
+            Thread.sleep(sec * 1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

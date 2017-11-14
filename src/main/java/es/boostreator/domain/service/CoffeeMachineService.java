@@ -17,7 +17,7 @@ public class CoffeeMachineService {
 
     private CoffeeMachineDao dao = new CoffeeMachineDaoImp();
 
-    public List<Product> getProductList(String product, List<Brand> brands, List<Site> sites) {
+    public List<Product> getProductList(String product, List<Brand> brands, List<Site> sites, int maxRs) {
         Map<Site, List<SiteProduct>> siteProductsMap = new HashMap<>();
         List<Product> products = new ArrayList<>();
 
@@ -26,7 +26,7 @@ public class CoffeeMachineService {
             for (Brand brand : brands) {
                 siteProductsMap
                         .get(site)
-                        .addAll(dao.getCoffeeMachineDAO(site).getSiteProductList(product, brand));
+                        .addAll(dao.getCoffeeMachineDao(site).getSiteProductList(product, brand, maxRs));
             }
         }
 

@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface CoffeeMachineSiteDao {
 
-    List<SiteProduct> getSiteProductList(String product, Brand brand);
+    List<SiteProduct> getSiteProductList(String product, Brand brand, int maxRs);
 
 }

@@ -21,10 +21,11 @@ public class BoostreatorApp {
         List<Site> sites = new ArrayList<>();
         List<Brand> brands = new ArrayList<>();
 
+        sites.add(Site.ELCORTEINGLES);
         sites.add(Site.FNAC);
-        brands.add(Brand.KRUPS);
-        brands.add(Brand.PHILIPS);
+        brands.add(Brand.DELONGHI);
+        //brands.add(Brand.PHILIPS);
 
-        coffeeMachineService.getProductList(product, brands, sites).forEach(System.out::println);
+        coffeeMachineService.getProductList(product, brands, sites, 20).forEach(System.out::println);
     }
 }
