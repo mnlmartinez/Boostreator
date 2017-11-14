@@ -1,6 +1,7 @@
 package es.boostreator;
 
 
+import es.boostreator.domain.model.Product;
 import es.boostreator.domain.model.enums.Brand;
 import es.boostreator.domain.model.enums.Site;
 import es.boostreator.domain.service.CoffeeMachineService;

@@ -57,7 +57,8 @@ public enum Brand {
         try {
             for (Brand brand : brands) if (text.contains(brand.name())) return brand;
         } catch (IllegalArgumentException ignored) {
-
+            System.out.println("Fallo en " + text);
+            ignored.printStackTrace();
         }
 
         return null;

@@ -37,6 +37,11 @@ public class Driver {
         return this.driver;
     }
 
+    public void scroll(int x, int y){
+        JavascriptExecutor jse = (JavascriptExecutor) driver;
+        jse.executeScript("window.scrollBy(" + x + "," + y + ")", "");
+    }
+
     void quit() {
         this.driver.quit();
     }

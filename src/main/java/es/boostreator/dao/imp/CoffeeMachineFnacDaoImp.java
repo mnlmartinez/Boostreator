@@ -4,13 +4,11 @@ import es.boostreator.dao.CoffeeMachineSiteDao;
 import es.boostreator.domain.model.SiteProduct;
 import es.boostreator.domain.model.enums.Brand;
 import es.boostreator.domain.model.enums.Site;
+import es.boostreator.domain.model.enums.Type;
 import es.boostreator.util.AppLogger;
 import es.boostreator.util.Driver;
 import es.boostreator.util.DriverFactory;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,9 +58,14 @@ public class CoffeeMachineFnacDaoImp implements CoffeeMachineSiteDao {
     }
 
     private boolean selectBrand(Brand brand) {
-        WebElement filterButton = driver.findElement(By.className("js-toggleFilters-more"));
+        WebElement filterButton = driver.findElement(By.className("toggleFilters"));
+        driver.scroll(0, 450);
         if (filterButton != null) {
-            filterButton.click();
+            try {
+                filterButton.click();
+            } catch (WebDriverException ex) {
+                return false;
+            }
             this.waitPageLoad();
         }
 
@@ -87,18 +90,19 @@ public class CoffeeMachineFnacDaoImp implements CoffeeMachineSiteDao {
         List<WebElement> elements = driver.findElements(By.className("Article-mosaicItem"));
 
         for (WebElement element : elements) {
-            String type;
-            String priceT;
             String model = "";
+            String priceT;
+            List<Type> types;
 
             if (limit()) break;
 
+            model = element.findElement(By.className("thumbnail-titleLink")).getText();
+            types = Type.getTypeListByProductTitle(model);
+
             try {
-                type = element.findElement(By.className("thumbnail-sub")).getText();
-                model = element.findElement(By.className("thumbnail-titleLink")).getText();
                 priceT = element.findElement(By.className("thumbnail-price")).getText();
             } catch (NoSuchElementException ex) {
-                AppLogger.log(Level.WARNING, "Error with " + model + " -- Not added to list");
+                AppLogger.log(Level.WARNING, "Error with " + model + ", price not found -- Not added to list");
                 continue;
             }
 
@@ -109,7 +113,7 @@ public class CoffeeMachineFnacDaoImp implements CoffeeMachineSiteDao {
                     .replace(",", ".")
             );
 
-            siteProducts.add(new SiteProduct(type, model, brand, price, this.site));
+            siteProducts.add(new SiteProduct(model, brand, types, price, this.site));
         }
     }
 
