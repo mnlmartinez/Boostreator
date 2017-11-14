@@ -23,6 +23,10 @@ public class CoffeeMachineService {
 
         for (Site site : sites) {
             siteProductsMap.put(site, new ArrayList<>());
+            if (brands.size() == 0)
+                siteProductsMap
+                        .get(site)
+                        .addAll(dao.getCoffeeMachineDao(site).getSiteProductList(product, null, maxRs));
             for (Brand brand : brands) {
                 siteProductsMap
                         .get(site)
@@ -32,7 +36,7 @@ public class CoffeeMachineService {
 
         siteProductsMap.forEach((site, siteProducts) ->
                 products.addAll(ProductMapper.siteProductList2ProductList(siteProducts)));
-        System.out.println(products.size());
+
         return products;
     }
 

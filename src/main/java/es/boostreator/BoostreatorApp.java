@@ -1,6 +1,7 @@
 package es.boostreator;
 
 
+import es.boostreator.domain.model.Product;
 import es.boostreator.domain.model.enums.Brand;
 import es.boostreator.domain.model.enums.Site;
 import es.boostreator.domain.service.CoffeeMachineService;
@@ -21,11 +22,24 @@ public class BoostreatorApp {
         List<Site> sites = new ArrayList<>();
         List<Brand> brands = new ArrayList<>();
 
-        sites.add(Site.ELCORTEINGLES);
         sites.add(Site.FNAC);
+        sites.add(Site.ELCORTEINGLES);
         brands.add(Brand.DELONGHI);
-        //brands.add(Brand.PHILIPS);
+        brands.add(Brand.PHILIPS);
 
-        coffeeMachineService.getProductList(product, brands, sites, 20).forEach(System.out::println);
+        List<Product> products = coffeeMachineService.getProductList(product, brands, sites, 10);
+
+        products.forEach(System.out::println);
+
+//        System.out.println("NO RELACIONADOS\n");
+//        products.forEach(e -> {
+//            if (e.getPrice().size()==1) System.out.println(e);
+//        });
+//
+//        System.out.println("");
+//        System.out.println("RELACIONADOS\n");
+//        products.forEach(e -> {
+//            if (e.getPrice().size()>1) System.out.println(e);
+//        });
     }
 }

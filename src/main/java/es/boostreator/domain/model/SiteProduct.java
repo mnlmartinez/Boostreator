@@ -2,29 +2,32 @@ package es.boostreator.domain.model;
 
 import es.boostreator.domain.model.enums.Brand;
 import es.boostreator.domain.model.enums.Site;
+import es.boostreator.domain.model.enums.Type;
+
+import java.util.List;
 
 public class SiteProduct {
 
-    private String type;
     private String model;
     private Brand brand;
+    private List<Type> types;
     private Double price;
     private Site site;
 
-    public SiteProduct(String type, String model, Brand brand, Double price, Site site) {
-        this.type = type;
+    public SiteProduct(String model, Brand brand, List<Type> types, Double price, Site site) {
         this.model = model;
         this.brand = brand;
+        this.types = types;
         this.price = price;
         this.site = site;
     }
 
-    public String getType() {
-        return type;
+    public List<Type> getTypes() {
+        return types;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setTypes(List<Type> types) {
+        this.types = types;
     }
 
     public String getModel() {

@@ -4,6 +4,7 @@ import es.boostreator.dao.CoffeeMachineSiteDao;
 import es.boostreator.domain.model.SiteProduct;
 import es.boostreator.domain.model.enums.Brand;
 import es.boostreator.domain.model.enums.Site;
+import es.boostreator.domain.model.enums.Type;
 import es.boostreator.util.AppLogger;
 import es.boostreator.util.Driver;
 import es.boostreator.util.DriverFactory;
@@ -89,18 +90,19 @@ public class CoffeeMachineECIDaoImp implements CoffeeMachineSiteDao {
                 findElements(By.cssSelector("div#product-list> ul > li > div.product-preview"));
 
         for (WebElement element : elements) {
-            String type;
             String priceT;
             String model = "";
+            List<Type> types;
 
             if(limit()) break;
 
+            model = element.findElement(By.className("js-product-click")).getAttribute("title");
+            types = Type.getTypeListByProductTitle(model);
+
             try {
-                type = "";
-                model = element.findElement(By.className("js-product-click")).getAttribute("title");
                 priceT = element.findElement(By.cssSelector("div.info > div.product-price > span.current")).getText();
             } catch (NoSuchElementException ex) {
-                AppLogger.log(Level.WARNING, "Error with " + model + " -- Not added to list");
+                AppLogger.log(Level.WARNING, "Error with " + model + ", price not found -- Not added to list");
                 continue;
             }
             Brand brand = extractBrand(element);
@@ -110,7 +112,7 @@ public class CoffeeMachineECIDaoImp implements CoffeeMachineSiteDao {
                     .replace(",", ".")
             );
 
-            siteProducts.add(new SiteProduct(type, model, brand, price, this.site));
+            siteProducts.add(new SiteProduct(model, brand, types, price, this.site));
         }
     }
 
