@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<AnchorPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="es.boostreator.view.SearchViewController">
+   <children>
+      <Pane prefHeight="720.0" prefWidth="276.0" style="-fx-background-color: #1d0d00; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0, 0, 0);" stylesheets="@style.css">
+         <children>
+            <VBox layoutY="152.0" prefHeight="567.0" prefWidth="276.0">
+               <children>
+                  <Pane prefHeight="200.0" prefWidth="206.0" style="-fx-background-color: #4d1a00;">
+                     <children>
+                        <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="62.0" layoutY="18.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@home.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </Pane>
+                  <Pane prefHeight="189.0" prefWidth="282.0" style="-fx-background-color: #331100;">
+                     <children>
+                        <ImageView fitHeight="63.0" fitWidth="69.0" layoutX="109.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@comparison.png" />
+                           </image>
+                        </ImageView>
+                        <Text fill="#fcfcfc" layoutX="76.0" layoutY="145.0" strokeType="OUTSIDE" strokeWidth="0.0" text="COMPARISON" wrappingWidth="136.0528335571289">
+                           <font>
+                              <Font size="19.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </Pane>
+                  <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #1d0a00;">
+                     <children>
+                        <ImageView fitHeight="81.0" fitWidth="75.0" layoutX="104.0" layoutY="27.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@about.png" />
+                           </image>
+                        </ImageView>
+                        <Text fill="WHITE" layoutX="118.0" layoutY="143.0" strokeType="OUTSIDE" strokeWidth="0.0" text="INFO" wrappingWidth="48.238547268301204">
+                           <font>
+                              <Font size="19.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </Pane>
+               </children>
+            </VBox>
+            <Text fill="WHITE" layoutX="6.0" layoutY="35.0" lineSpacing="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="COFFEE BOOSTREATOR" textAlignment="CENTER" wrappingWidth="273.07275390625">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Text>
+            <Pane layoutX="58.0" layoutY="57.0" prefHeight="9.0" prefWidth="163.0" style="-fx-background-color: #804000;" />
+         </children>
+      </Pane>
+      <Pane layoutX="277.0" prefHeight="720.0" prefWidth="1003.0">
+         <children>
+            <Pane layoutX="616.0" layoutY="-11.0" prefHeight="731.0" prefWidth="388.0" style="-fx-background-color: #1c1c1c;">
+               <children>
+                  <JFXListView fx:id="resultsListView" layoutY="66.0" prefHeight="664.0" prefWidth="388.0" style="-fx-background-color: #1c1c1c;" />
+                  <Text fill="WHITE" layoutX="39.0" layoutY="52.0" strokeType="OUTSIDE" strokeWidth="0.0" text="RESULTS">
+                     <font>
+                        <Font size="25.0" />
+                     </font>
+                  </Text>
+                  <JFXSpinner fx:id="loadCircle" layoutX="163.0" layoutY="314.0" />
+                  <Text fx:id="loadText" fill="WHITE" layoutX="122.0" layoutY="436.0" strokeType="OUTSIDE" strokeWidth="0.0" text="No search parameters" />
+               </children>
+            </Pane>
+            <JFXTextField fx:id="searchBox" focusColor="#754d2d" layoutX="18.0" layoutY="27.0" onInputMethodTextChanged="#searchBarInput" prefHeight="96.0" prefWidth="564.0" promptText="Search">
+               <font>
+                  <Font size="51.0" />
+               </font>
+            </JFXTextField>
+            <Text fill="#3c3c3c" layoutX="31.0" layoutY="218.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Categories" wrappingWidth="140.59824858261032">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Text>
+            <JFXComboBox fx:id="categoriesDrawer" focusColor="#654426" layoutX="185.0" layoutY="196.0" onShowing="#initializeCategoriesDrawer" prefHeight="27.0" prefWidth="197.0" promptText="none" />
+            <JFXButton fx:id="applyCategories" layoutX="426.0" layoutY="196.0" onAction="#applyCategoriesButton" prefHeight="32.0" prefWidth="88.0" style="-fx-background-color: #DDD;" text="Apply" />
+            <Text fill="#3c3c3c" layoutX="31.0" layoutY="275.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Brands" wrappingWidth="140.59824858261032">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Text>
+            <JFXComboBox fx:id="BrandsDrawer" focusColor="#654426" layoutX="185.0" layoutY="253.0" prefHeight="27.0" prefWidth="197.0" promptText="none" />
+            <JFXButton fx:id="brandButton" layoutX="427.0" layoutY="253.0" onAction="#applyBrandButton" prefHeight="32.0" prefWidth="88.0" style="-fx-background-color: #DDD;" text="Apply" />
+            <Text fill="#3c3c3c" layoutX="33.0" layoutY="431.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Only show results for:" wrappingWidth="249.5541714181137">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Text>
+            <JFXToggleButton fx:id="fnacSwitch" layoutX="43.0" layoutY="460.0" onAction="#changeFnacSwitch" prefHeight="124.0" prefWidth="240.0" text="FNAC" toggleColor="#8f5e00" toggleLineColor="#a48d5e" />
+            <JFXToggleButton fx:id="ElCorteInglesSwitch" layoutX="311.0" layoutY="462.0" onAction="#changeElCorteInglesSwitch" prefHeight="124.0" prefWidth="217.0" text="El Corte Inglés" toggleColor="#8f5e00" toggleLineColor="#a48d5e" />
+            <Text fill="#282828" layoutX="32.0" layoutY="695.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Too search for product, click enter after entering search paramter or click search at the bottom of the view" wrappingWidth="556.0841699378965" />
+            <JFXButton onAction="#findProducts" layoutX="425.0" layoutY="599.0" prefHeight="42.0" prefWidth="91.0" style="-fx-background-color: #DDD;" text="Search" />
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>
