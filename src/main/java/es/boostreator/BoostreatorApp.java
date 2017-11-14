@@ -6,31 +6,40 @@ import es.boostreator.domain.model.enums.Brand;
 import es.boostreator.domain.model.enums.Site;
 import es.boostreator.domain.service.CoffeeMachineService;
 import es.boostreator.util.AppLogger;
-import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
-import java.net.URL;
 
+import java.util.ArrayList;
+import java.util.List;
 
-
-public class BoostreatorApp extends Application {
-
-    @Override
-    public void start(Stage primaryStage) throws Exception{
-        String resourcePath = "/view/SearchView.fxml";
-        URL location = getClass().getResource(resourcePath);
-        FXMLLoader fxmlLoader = new FXMLLoader(location);
-
-        Scene scene = new Scene(fxmlLoader.load(), 1280, 720);
-        primaryStage.setScene(scene);
-        primaryStage.show();
-
-    }
+public class BoostreatorApp {
 
 
     public static void main(String[] args) {
         AppLogger.debugMode();
-        launch(args);
+
+        CoffeeMachineService coffeeMachineService = new CoffeeMachineService();
+
+        String product = "Cafetera";
+        List<Site> sites = new ArrayList<>();
+        List<Brand> brands = new ArrayList<>();
+
+        sites.add(Site.FNAC);
+        sites.add(Site.ELCORTEINGLES);
+        brands.add(Brand.DELONGHI);
+        brands.add(Brand.PHILIPS);
+
+        List<Product> products = coffeeMachineService.getProductList(product, brands, sites, 10);
+
+        products.forEach(System.out::println);
+
+//        System.out.println("NO RELACIONADOS\n");
+//        products.forEach(e -> {
+//            if (e.getPrice().size()==1) System.out.println(e);
+//        });
+//
+//        System.out.println("");
+//        System.out.println("RELACIONADOS\n");
+//        products.forEach(e -> {
+//            if (e.getPrice().size()>1) System.out.println(e);
+//        });
     }
 }

@@ -34,8 +34,7 @@ public class CoffeeMachineService {
             }
         }
 
-        siteProductsMap.forEach((site, siteProducts) ->
-                products.addAll(ProductMapper.siteProductList2ProductList(siteProducts)));
+        products.addAll(ProductMapper.siteProductMap2ProductList(siteProductsMap));
 
         return products;
     }
