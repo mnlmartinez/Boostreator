@@ -7,6 +7,7 @@ import es.boostreator.domain.model.enums.Brand;
 import es.boostreator.domain.model.enums.Site;
 import es.boostreator.domain.service.CoffeeMachineService;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -69,6 +70,9 @@ public class SearchViewController implements Initializable {
     @FXML
     private JFXSlider sliderLimit;
 
+    @FXML
+    private JFXButton searchButton;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.initializeBrandsDrawer();
@@ -125,7 +129,6 @@ public class SearchViewController implements Initializable {
         brandColumn.setCellValueFactory(new PropertyValueFactory("brand"));
         modelColumn.setCellValueFactory(new PropertyValueFactory("model"));
 
-
         try {
             typeColumn.setCellValueFactory((c -> new SimpleStringProperty(
                     c.getValue().toStringTypes().toLowerCase())));
@@ -145,9 +148,26 @@ public class SearchViewController implements Initializable {
     public void findProducts() {
         configureParameters();
         resultsListView.getItems().clear();
+        searchButton.setDisable(true);
         String selected = categoriesDrawer.getSelectionModel().getSelectedItem();
-        List<Product> res = service.getProductList(selected == null ? "cafetera" : "cafetera " + selected, brands, sites, (int) sliderLimit.getValue());
-        resultsListView.getItems().addAll(res);
+        new Thread(new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                List<Product> res = service.getProductList(
+                        (selected == null ? "Cafetera" : "Cafetera " + selected),
+                        brands,
+                        sites,
+                        (int) sliderLimit.getValue()
+                );
+                resultsListView.getItems().addAll(res);
+                return null;
+            }
+
+            @Override
+            protected void succeeded() {
+                searchButton.setDisable(false);
+            }
+        }).start();
     }
 
     @FXML
