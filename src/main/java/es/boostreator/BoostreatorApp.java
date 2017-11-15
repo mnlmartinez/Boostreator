@@ -1,6 +1,7 @@
 package es.boostreator;
 
 import es.boostreator.util.AppLogger;
+import es.boostreator.view.SearchViewController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -14,9 +15,9 @@ public class BoostreatorApp extends Application {
     public void start(Stage primaryStage) throws Exception {
         String resourcePath = "/view/SearchView.fxml";
         URL location = getClass().getResource(resourcePath);
-        FXMLLoader fxmlLoader = new FXMLLoader(location);
+        FXMLLoader loader = new FXMLLoader(location);
 
-        Scene scene = new Scene(fxmlLoader.load(), 1280, 720);
+        Scene scene = new Scene(loader.load(), 1280, 720);
         primaryStage.setScene(scene);
         primaryStage.show();
     }

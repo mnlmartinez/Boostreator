@@ -11,16 +11,20 @@ import es.boostreator.domain.service.CoffeeMachineService;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
 
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.ResourceBundle;
 
 
-public class SearchViewController {
+public class SearchViewController implements Initializable {
 
     @FXML
     private JFXSpinner loadCircle;
@@ -38,8 +42,7 @@ public class SearchViewController {
     private JFXComboBox categoriesDrawer;
 
     @FXML
-    private JFXComboBox brandDrawer;
-
+    private JFXComboBox<Brand> brandsDrawer;
 
     @FXML
     private TableView<Product> resultsListView;
@@ -56,6 +59,10 @@ public class SearchViewController {
     @FXML
     private TableColumn<Product, String> priceFNACColumn;
 
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        this.initializeBrandsDrawer();
+    }
 
     @FXML
     public void applyBrandButton(ActionEvent actionEvent) {
@@ -78,10 +85,7 @@ public class SearchViewController {
 
 
     public void initializeBrandsDrawer() {
-        ArrayList<String> brands = new ArrayList<>();
-        brands.add("Phillips");
-        brands.add("Nespresso");
-        brandDrawer.getItems().addAll(brands);
+        brandsDrawer.getItems().addAll(Arrays.asList(Brand.values()));
     }
 
 

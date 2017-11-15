@@ -54,8 +54,17 @@ public class Product {
         this.price = price;
     }
 
-    public String toStringPrice(Site site){
+    public String toStringPrice(Site site) {
         return this.getPrice().get(site).toString();
+    }
+
+    public String toStringTypes() {
+        String str = "";
+        for (int i = 0; i < types.size(); i++) {
+            if (i == 0) str = types.get(0).name();
+            else str += ", " + types.get(i).name();
+        }
+        return str;
     }
 
     @Override

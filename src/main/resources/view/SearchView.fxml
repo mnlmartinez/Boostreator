@@ -103,18 +103,9 @@
                   <Font size="24.0" />
                </font>
             </Text>
-            <JFXComboBox fx:id="BrandsDrawer" focusColor="#654426" layoutX="185.0" layoutY="253.0" prefHeight="27.0" prefWidth="197.0" promptText="none">
+            <JFXComboBox fx:id="brandsDrawer" focusColor="#654426" layoutX="185.0" layoutY="253.0" prefHeight="27.0" prefWidth="197.0" promptText="none">
                <items>
                   <FXCollections fx:factory="observableArrayList">
-                     <String fx:value="De'longhi" />
-                     <String fx:value="Krups" />
-                     <String fx:value="Electrolux" />
-                     <String fx:value="Philips" />
-                     <String fx:value="Proline" />
-                     <String fx:value="Bialetti" />
-                     <String fx:value="Taurus" />
-                     <String fx:value="Bosch" />
-                     <String fx:value="Tassimo" />
                   </FXCollections>
                </items>
             </JFXComboBox>
