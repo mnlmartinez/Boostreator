@@ -110,14 +110,17 @@ public class SearchViewController{
         findProducts();
         brandColumn.setCellValueFactory(new PropertyValueFactory("brand"));
         modelColumn.setCellValueFactory(new PropertyValueFactory("model"));
-        priceECIColumn.setCellValueFactory((c -> new SimpleStringProperty(
+        try{
+            priceECIColumn.setCellValueFactory((c -> new SimpleStringProperty(
+                    !c.getValue().getPrice().toString().contains("ELCORTEINGLES")  ? "None" : c.getValue().getPrice().toString())));
 
-                c.getValue().getPrice().toString()
-                        .substring(c.getValue().getPrice().toString().indexOf(',')+15,c.getValue().getPrice().toString().length()-1))));
+            priceFNACColumn.setCellValueFactory((c -> new SimpleStringProperty(
+                    !c.getValue().getPrice().toString().contains("FNAC") ? "None" : c.getValue().getPrice().toString())));
 
-        priceFNACColumn.setCellValueFactory((c -> new SimpleStringProperty(
 
-                c.getValue().getPrice().toString().substring(c.getValue().getPrice().toString().indexOf('F')+5,c.getValue().getPrice().toString().indexOf(',')-1))));
+        }catch(Exception e){
+
+        }
 
     }
 
@@ -130,7 +133,6 @@ public class SearchViewController{
         List<Product> res = service.getProductList(searchParameter, brands, sites, 20);
         resultsListView.getItems().addAll(res);
         System.out.println(res);
-        loadCircle.setVisible(false);
     }
 
     @FXML
