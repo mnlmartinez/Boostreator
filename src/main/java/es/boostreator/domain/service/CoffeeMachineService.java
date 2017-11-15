@@ -28,6 +28,7 @@ public class CoffeeMachineService {
                         .get(site)
                         .addAll(dao.getCoffeeMachineDao(site).getSiteProductList(product, null, maxRs));
             for (Brand brand : brands) {
+                if (brand != null && !brand.isAvailableIn(site)) continue;
                 siteProductsMap
                         .get(site)
                         .addAll(dao.getCoffeeMachineDao(site).getSiteProductList(product, brand, maxRs));

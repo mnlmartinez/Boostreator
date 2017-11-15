@@ -13,38 +13,45 @@ public class ProductMapper {
 
     public static List<Product> siteProductMap2ProductList(Map<Site, List<SiteProduct>> siteProductsMap) {
         List<Product> products = new ArrayList<>();
-        List<SiteProduct> fnac = siteProductsMap.get(Site.FNAC);
-        List<SiteProduct> eci = siteProductsMap.get(Site.ELCORTEINGLES);
+        List<SiteProduct> siteProducts1 = siteProductsMap.getOrDefault(Site.FNAC, null);
+        List<SiteProduct> siteProducts2 = siteProductsMap.getOrDefault(Site.ELCORTEINGLES, null);
 
-        for (; !fnac.isEmpty(); ) {
-            SiteProduct p1 = fnac.get(0);
+        if (siteProducts1 == null) {
+            siteProducts1 = siteProducts2;
+            siteProducts2 = null;
+        }
+
+        for (; !siteProducts1.isEmpty(); ) {
+            SiteProduct p1 = siteProducts1.get(0);
             SiteProduct found = null;
             int max = 0;
 
-            for (SiteProduct p2 : eci) {
-                if (compareBrands(p1, p2) && compareTypes(p1, p2) && comparePrices(p1, p2)) {
-                    int points = compareProducts(p1, p2);
-                    if (max < points) {
-                        max = points;
-                        found = p2;
+            if (siteProducts2 != null)
+                for (SiteProduct p2 : siteProducts2) {
+                    if (compareBrands(p1, p2) && compareTypes(p1, p2) && comparePrices(p1, p2)) {
+                        int points = compareProducts(p1, p2);
+                        if (max < points) {
+                            max = points;
+                            found = p2;
+                        }
                     }
                 }
-            }
 
             if (found != null && max >= getMinToJoin(p1, found)) {
                 List<SiteProduct> siteProducts = new ArrayList<>();
                 siteProducts.add(p1);
                 siteProducts.add(found);
-                eci.remove(found);
+                siteProducts2.remove(found);
                 products.add(siteProductList2Product(siteProducts));
             } else {
                 products.add(siteProduct2Product(p1));
             }
 
-            fnac.remove(p1);
+            siteProducts1.remove(p1);
         }
 
-        while (!eci.isEmpty()) products.add(siteProduct2Product(eci.remove(0)));
+        while (siteProducts2 != null && !siteProducts2.isEmpty())
+            products.add(siteProduct2Product(siteProducts2.remove(0)));
 
         return products;
     }
@@ -151,7 +158,7 @@ public class ProductMapper {
                 .replace("UN", "")
                 .replace("EL", "")
                 .replace("A", "")
-                .replace("/","")
+                .replace("/", "")
                 .replaceAll(" {2}", " ");
         return desc.split(" ");
     }

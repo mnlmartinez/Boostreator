@@ -54,6 +54,10 @@ public class Product {
         this.price = price;
     }
 
+    public String toStringPrice(Site site){
+        return this.getPrice().get(site).toString();
+    }
+
     @Override
     public String toString() {
         return "Product{" +

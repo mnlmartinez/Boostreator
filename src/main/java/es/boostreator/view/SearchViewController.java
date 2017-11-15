@@ -1,28 +1,26 @@
 package es.boostreator.view;
 
 
+import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXSpinner;
+import com.jfoenix.controls.JFXTextField;
 import es.boostreator.domain.model.Product;
 import es.boostreator.domain.model.enums.Brand;
 import es.boostreator.domain.model.enums.Site;
 import es.boostreator.domain.service.CoffeeMachineService;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import com.jfoenix.controls.*;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
-import javafx.util.Callback;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class SearchViewController{
+public class SearchViewController {
 
     @FXML
     private JFXSpinner loadCircle;
@@ -68,18 +66,18 @@ public class SearchViewController{
     }
 
     @FXML
-    public void applyCategoriesButton(ActionEvent actionEvent){
+    public void applyCategoriesButton(ActionEvent actionEvent) {
         //APPLY CATEGORIES CHOICE
     }
 
     @FXML
-    public void searchBarInput(ActionEvent actionEvent){
+    public void searchBarInput(ActionEvent actionEvent) {
         //ON TEXT CHANGE
         searchParameter = "cafetera " + searchBarInput.getText();
     }
 
 
-    public void initializeBrandsDrawer(){
+    public void initializeBrandsDrawer() {
         ArrayList<String> brands = new ArrayList<>();
         brands.add("Phillips");
         brands.add("Nespresso");
@@ -89,6 +87,7 @@ public class SearchViewController{
 
     //FNAC SWITCH
     public boolean fnacSwitchState = false;
+
     //ELCORTEINGLES SWITCH
     public boolean elCorteInglesSwitchState = false;
 
@@ -99,35 +98,30 @@ public class SearchViewController{
     public String searchParameter = "cafetera";
 
 
-
-
-
     //Instantiate coffeeMachineService
     CoffeeMachineService service = new CoffeeMachineService();
 
     @FXML
-    public void findProducts(ActionEvent actionEvent){
+    public void findProducts(ActionEvent actionEvent) {
         findProducts();
         brandColumn.setCellValueFactory(new PropertyValueFactory("brand"));
         modelColumn.setCellValueFactory(new PropertyValueFactory("model"));
-        try{
+        try {
             priceECIColumn.setCellValueFactory((c -> new SimpleStringProperty(
-                    !c.getValue().getPrice().toString().contains("ELCORTEINGLES")  ? "None" : c.getValue().getPrice().toString())));
+                    !c.getValue().getPrice().toString().contains("ELCORTEINGLES") ? "None" : c.getValue().toStringPrice(Site.ELCORTEINGLES))));
 
             priceFNACColumn.setCellValueFactory((c -> new SimpleStringProperty(
-                    !c.getValue().getPrice().toString().contains("FNAC") ? "None" : c.getValue().getPrice().toString())));
-
-
-        }catch(Exception e){
+                    !c.getValue().getPrice().toString().contains("FNAC") ? "None" : c.getValue().toStringPrice(Site.FNAC))));
+        } catch (Exception e) {
 
         }
 
     }
 
 
-    public void findProducts(){
+    public void findProducts() {
         configureParameters();
-        resultsListView.getItems().removeAll();
+        resultsListView.getItems().clear();//.removeAll();
 
         System.out.println("passed configure parameters");
         List<Product> res = service.getProductList(searchParameter, brands, sites, 20);
@@ -136,16 +130,24 @@ public class SearchViewController{
     }
 
     @FXML
-    public void changeFnacSwitch(ActionEvent actionEvent){ fnacSwitchState = !fnacSwitchState; }
+    public void changeFnacSwitch(ActionEvent actionEvent) {
+        fnacSwitchState = !fnacSwitchState;
+    }
 
     @FXML
-    public void changeElCorteInglesSwitch(ActionEvent actionEvent){ elCorteInglesSwitchState = !elCorteInglesSwitchState; }
+    public void changeElCorteInglesSwitch(ActionEvent actionEvent) {
+        elCorteInglesSwitchState = !elCorteInglesSwitchState;
+    }
 
 
-    public void configureParameters(){
-        if(!fnacSwitchState && !elCorteInglesSwitchState) sites.add(Site.FNAC); sites.add(Site.ELCORTEINGLES);
-        if(elCorteInglesSwitchState) sites.add(Site.ELCORTEINGLES);
-        if(fnacSwitchState) sites.add(Site.FNAC);
+    public void configureParameters() {
+        sites = new ArrayList<>();
+        if (!fnacSwitchState && !elCorteInglesSwitchState) {
+            sites.add(Site.FNAC);
+            sites.add(Site.ELCORTEINGLES);
+        }
+        if (elCorteInglesSwitchState) sites.add(Site.ELCORTEINGLES);
+        if (fnacSwitchState) sites.add(Site.FNAC);
     }
 }
 
