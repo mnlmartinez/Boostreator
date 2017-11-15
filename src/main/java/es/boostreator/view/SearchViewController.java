@@ -16,8 +16,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -30,6 +30,18 @@ import java.util.ResourceBundle;
 
 
 public class SearchViewController implements Initializable {
+
+    // Instantiate coffeeMachineService
+    private CoffeeMachineService service = new CoffeeMachineService();
+
+    // Switch
+    @FXML
+    private boolean fnacSwitch = false;
+
+    private boolean eciSwitch = false;
+
+    private List<Site> sites = new ArrayList<>();
+    private List<Brand> brands = new ArrayList<>();
 
     @FXML
     private JFXSpinner loadCircle;
@@ -53,10 +65,10 @@ public class SearchViewController implements Initializable {
     private TableView<Product> resultsListView;
 
     @FXML
-    private TableColumn brandColumn;
+    private TableColumn<Product, String> brandColumn;
 
     @FXML
-    private TableColumn modelColumn;
+    private TableColumn<Product, String> modelColumn;
 
     @FXML
     private TableColumn<Product, String> typeColumn;
@@ -73,93 +85,48 @@ public class SearchViewController implements Initializable {
     @FXML
     private JFXButton searchButton;
 
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.initializeBrandsDrawer();
         this.initializeCategoriesDrawer();
-
-        resultsListView.setRowFactory(tv -> {
-            TableRow<Product> row = new TableRow<>();
-            row.setOnMouseClicked(event -> {
-                if (!row.isEmpty() && event.getButton() == MouseButton.PRIMARY
-                        && event.getClickCount() == 2) {
-
-                    Product clickedRow = row.getItem();
-                    System.out.println(clickedRow.toString());
-                    showDialog(clickedRow);
-                }
-            });
-            return row;
-        });
+        this.initializeColumns();
+        this.initializeListeners();
     }
 
-
-    public void initializeBrandsDrawer() {
-        brandsDrawer.getItems().addAll(Arrays.asList(Brand.values()));
-    }
-
-    public void initializeCategoriesDrawer() {
-        categoriesDrawer.getItems().addAll(
-                "Automática",
-                "Manual",
-                "Espresso",
-                "Italiana",
-                "Goteo",
-                "Capsulas"
-        );
-    }
-
-
-    //FNAC SWITCH
-    public boolean fnacSwitchState = false;
-
-    //ELCORTEINGLES SWITCH
-    public boolean elCorteInglesSwitchState = false;
-
-    public List<Site> sites = new ArrayList<>();
-    public List<Brand> brands = new ArrayList<>();
-
-
-    //Instantiate coffeeMachineService
-    CoffeeMachineService service = new CoffeeMachineService();
 
     @FXML
-    public void findProducts(ActionEvent actionEvent) {
-        findProducts();
-        brandColumn.setCellValueFactory(new PropertyValueFactory("brand"));
-        modelColumn.setCellValueFactory(new PropertyValueFactory("model"));
+    public void search(ActionEvent actionEvent) {
+        this.setParameters();
 
-        try {
-            typeColumn.setCellValueFactory((c -> new SimpleStringProperty(
-                    c.getValue().toStringTypes().toLowerCase())));
+        searchButton.setDisable(true);
+        resultsListView.getItems().clear();
 
-            priceECIColumn.setCellValueFactory((c -> new SimpleStringProperty(
-                    !c.getValue().getPrice().toString().contains("ELCORTEINGLES") ? "None" : c.getValue().toStringPrice(Site.ELCORTEINGLES))));
-
-            priceFNACColumn.setCellValueFactory((c -> new SimpleStringProperty(
-                    !c.getValue().getPrice().toString().contains("FNAC") ? "None" : c.getValue().toStringPrice(Site.FNAC))));
-        } catch (Exception e) {
-
-        }
-
+        this.launchThread();
     }
 
+    @FXML
+    public void changeFnacSwitch(ActionEvent actionEvent) {
+        fnacSwitch = !fnacSwitch;
+    }
 
-    public void findProducts() {
-        configureParameters();
-        resultsListView.getItems().clear();
-        searchButton.setDisable(true);
-        String selected = categoriesDrawer.getSelectionModel().getSelectedItem();
+    @FXML
+    public void changeEciSwitch(ActionEvent actionEvent) {
+        eciSwitch = !eciSwitch;
+    }
+
+    private void launchThread() {
         new Thread(new Task<Void>() {
             @Override
             protected Void call() throws Exception {
-                List<Product> res = service.getProductList(
+                String selected = categoriesDrawer.getSelectionModel().getSelectedItem();
+                List<Product> products = service.getProductList(
                         (selected == null ? "Cafetera" : "Cafetera " + selected),
                         brands,
                         sites,
                         (int) sliderLimit.getValue()
                 );
-                resultsListView.getItems().addAll(res);
+                resultsListView.getItems().addAll(products);
                 return null;
             }
 
@@ -170,55 +137,105 @@ public class SearchViewController implements Initializable {
         }).start();
     }
 
-    @FXML
-    public void changeFnacSwitch(ActionEvent actionEvent) {
-        fnacSwitchState = !fnacSwitchState;
+    private void initializeBrandsDrawer() {
+        brandsDrawer.getItems().addAll(Arrays.asList(Brand.values()));
     }
 
-    @FXML
-    public void changeElCorteInglesSwitch(ActionEvent actionEvent) {
-        elCorteInglesSwitchState = !elCorteInglesSwitchState;
+    private void initializeCategoriesDrawer() {
+        categoriesDrawer.getItems().addAll(
+                "Automática",
+                "Manual",
+                "Espresso",
+                "Italiana",
+                "Goteo",
+                "Cápsulas"
+        );
     }
 
+    private void initializeColumns() {
+        brandColumn.setCellValueFactory(c ->
+                new SimpleStringProperty(
+                        (c.getValue().getBrand() == null) ? "" : c.getValue().getBrand().name()));
 
-    public void configureParameters() {
+        modelColumn.setCellValueFactory(c ->
+                new SimpleStringProperty(
+                        (c.getValue().getModel() == null) ? "" : c.getValue().getModel()));
+
+        typeColumn.setCellValueFactory(c -> new SimpleStringProperty(
+                c.getValue().toStringTypes().toLowerCase()));
+
+        priceECIColumn.setCellValueFactory(c ->
+                new SimpleStringProperty(
+                        (c.getValue().getPrice().get(Site.ELCORTEINGLES) == null) ? "x" :
+                                c.getValue().toStringPrice(Site.ELCORTEINGLES)));
+
+        priceFNACColumn.setCellValueFactory(c -> new SimpleStringProperty(
+                c.getValue().getPrice().get(Site.FNAC) == null ? "x" :
+                        c.getValue().toStringPrice(Site.FNAC)));
+    }
+
+    private void initializeListeners() {
+        resultsListView.setRowFactory(tv -> {
+            TableRow<Product> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (!row.isEmpty() && event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
+                    Product product = row.getItem();
+                    showDialog(product);
+                }
+            });
+            return row;
+        });
+    }
+
+    private void setParameters() {
         sites = new ArrayList<>();
-        if (!fnacSwitchState && !elCorteInglesSwitchState) {
+        if (!fnacSwitch && !eciSwitch) {
             sites.add(Site.FNAC);
             sites.add(Site.ELCORTEINGLES);
         }
-        if (elCorteInglesSwitchState) sites.add(Site.ELCORTEINGLES);
-        if (fnacSwitchState) sites.add(Site.FNAC);
+        if (eciSwitch) sites.add(Site.ELCORTEINGLES);
+        if (fnacSwitch) sites.add(Site.FNAC);
     }
 
-    public void showDialog(Product p) {
+    private void showDialog(Product p) {
+        Stage dialog = new Stage();
+        dialog.initStyle(StageStyle.UTILITY);
 
-
-        Stage dialog1 = new Stage();
-        dialog1.initStyle(StageStyle.UTILITY);
-        Text title = new Text("Product View");
-        title.setY(20.0);
+        Text title = new Text("PRODUCT VIEW");
+        title.setY(30.0);
         title.setX(20.0);
-        Text brand = new Text("Brand: " + p.getBrand().name());
+        title.setFont(Font.font(16));
+
+        Text brand = new Text("Brand:  " + ((p.getBrand() == null) ? "" : p.getBrand().name()));
         brand.setY(60.0);
         brand.setX(20.0);
-        Text model = new Text("Model: " + p.getModel().toString());
-        model.setY(80.0);
-        model.setX(20.0);
-        Text types = new Text("Types: " + p.toStringTypes());
-        types.setY(100.0);
-        types.setX(20.0);
-        Text priceECI = new Text("Price EL CORTE INGLES: " + p.getPrice().get(Site.ELCORTEINGLES) == null ? "Not Found" : ("Price 'El Corte Ingles': " + p.getPrice().get(Site.ELCORTEINGLES)));
-        priceECI.setY(120.0);
-        priceECI.setX(20.0);
-        Text priceFNAC = new Text("Price FNAC: " + p.getPrice().get(Site.FNAC) == null ? "Not Found" : ("Price FNAC: " + p.getPrice().get(Site.FNAC)));
-        priceFNAC.setY(140.0);
-        priceFNAC.setX(20.0);
-        Scene scene = new Scene(new Group(title, brand, model, types, priceECI, priceFNAC), 550, 150);
-        dialog1.setScene(scene);
-        dialog1.show();
-    }
 
+        Text model = new Text("Model: " + p.getModel());
+        model.setY(90.0);
+        model.setX(20.0);
+
+        Text types = new Text("Types: " + p.toStringTypes());
+        types.setY(120.0);
+        types.setX(20.0);
+
+        Text priceECI = new Text("Price EL CORTE INGLES: " +
+                (p.getPrice().get(Site.ELCORTEINGLES) == null
+                        ? "Not Found"
+                        : p.getPrice().get(Site.ELCORTEINGLES) + " €"));
+        priceECI.setY(150.0);
+        priceECI.setX(20.0);
+
+        Text priceFNAC = new Text("Price FNAC: " +
+                (p.getPrice().get(Site.FNAC) == null
+                        ? "Not Found"
+                        : p.getPrice().get(Site.FNAC) + " €"));
+        priceFNAC.setY(180.0);
+        priceFNAC.setX(20.0);
+
+        Scene scene = new Scene(new Group(title, brand, model, types, priceECI, priceFNAC), 550, 200);
+        dialog.setScene(scene);
+        dialog.show();
+    }
 
 }
 

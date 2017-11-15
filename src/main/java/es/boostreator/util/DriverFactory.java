@@ -11,12 +11,11 @@ public class DriverFactory {
     public static Driver get() {
         if (driver == null) {
             driver = getChromeDriver();
-            Runtime.getRuntime().addShutdownHook(new Thread(DriverFactory::close));
         }
         return driver;
     }
 
-    private static void close() {
+    public static void close() {
         if (driver != null) {
             driver.quit();
             driver = null;
