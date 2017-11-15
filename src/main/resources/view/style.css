@@ -3,3 +3,7 @@
 .hamburger{
     color: #FFF;
 }
+
+.thumb{
+    -fx-background-color: #754d2d;
+}
