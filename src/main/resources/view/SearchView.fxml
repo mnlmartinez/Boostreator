@@ -1,9 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXDrawer?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.JFXToggleButton?>
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
 <AnchorPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="es.boostreator.view.SearchViewController">
    <children>
       <Pane prefHeight="720.0" prefWidth="276.0" style="-fx-background-color: #1d0d00; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0, 0, 0);" stylesheets="@style.css">
@@ -21,18 +34,8 @@
                   </Pane>
                   <Pane prefHeight="189.0" prefWidth="282.0" style="-fx-background-color: #331100;">
                      <children>
-                        <ImageView fitHeight="63.0" fitWidth="69.0" layoutX="109.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@comparison.png" />
-                           </image>
-                        </ImageView>
-                        <Text fill="#fcfcfc" layoutX="76.0" layoutY="145.0" strokeType="OUTSIDE" strokeWidth="0.0" text="COMPARISON" wrappingWidth="136.0528335571289">
-                           <font>
-                              <Font size="19.0" />
-                           </font>
-                        </Text>
-                     </children>
-                  </Pane>
+                        <Text fill="#f5f5f5" layoutX="21.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Use Coffee Boostreator to find different coffeemakers from FNAC and El Corte Ingles. Coffee Boostreator will compare prices and show the best deals. It will also allow you to search and look for different categories and brands. Try it out!" textAlignment="CENTER" wrappingWidth="232.7119140625" />
+                     </children></Pane>
                   <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #1d0a00;">
                      <children>
                         <ImageView fitHeight="81.0" fitWidth="75.0" layoutX="104.0" layoutY="27.0" pickOnBounds="true" preserveRatio="true">
@@ -49,29 +52,33 @@
                   </Pane>
                </children>
             </VBox>
-            <Text fill="WHITE" layoutX="6.0" layoutY="35.0" lineSpacing="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="COFFEE BOOSTREATOR" textAlignment="CENTER" wrappingWidth="273.07275390625">
-               <font>
-                  <Font size="24.0" />
-               </font>
-            </Text>
-            <Pane layoutX="58.0" layoutY="57.0" prefHeight="9.0" prefWidth="163.0" style="-fx-background-color: #804000;" />
+            <ImageView fitHeight="90.0" fitWidth="144.0" layoutX="72.0" layoutY="33.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@logo.png" />
+               </image>
+            </ImageView>
          </children>
       </Pane>
       <Pane layoutX="277.0" prefHeight="720.0" prefWidth="1003.0">
          <children>
-            <Pane layoutX="616.0" layoutY="-11.0" prefHeight="731.0" prefWidth="388.0" style="-fx-background-color: #1c1c1c;">
+            <Pane layoutX="541.0" layoutY="-11.0" prefHeight="731.0" prefWidth="463.0" style="-fx-background-color: #1c1c1c;">
                <children>
-                  <JFXListView fx:id="resultsListView" layoutY="66.0" prefHeight="664.0" prefWidth="388.0" style="-fx-background-color: #1c1c1c;" />
                   <Text fill="WHITE" layoutX="39.0" layoutY="52.0" strokeType="OUTSIDE" strokeWidth="0.0" text="RESULTS">
                      <font>
                         <Font size="25.0" />
                      </font>
                   </Text>
-                  <JFXSpinner fx:id="loadCircle" layoutX="163.0" layoutY="314.0" />
-                  <Text fx:id="loadText" fill="WHITE" layoutX="122.0" layoutY="436.0" strokeType="OUTSIDE" strokeWidth="0.0" text="No search parameters" />
+                  <TableView fx:id="resultsListView" layoutY="70.0" prefHeight="657.0" prefWidth="463.0" style="-fx-background-color: #1c1c1c1c;">
+                    <columns>
+                      <TableColumn fx:id="brandColumn" prefWidth="90.0" text="Brand" />
+                      <TableColumn fx:id="modelColumn" prefWidth="230.0" text="Model" />
+                        <TableColumn fx:id="priceECIColumn" prefWidth="63.0" text="Price ECI" />
+                        <TableColumn fx:id="priceFNACColumn" text="Price FNAC" />
+                    </columns>
+                  </TableView>
                </children>
             </Pane>
-            <JFXTextField fx:id="searchBox" focusColor="#754d2d" layoutX="18.0" layoutY="27.0" onInputMethodTextChanged="#searchBarInput" prefHeight="96.0" prefWidth="564.0" promptText="Search">
+            <JFXTextField fx:id="searchBox" focusColor="#754d2d" layoutX="18.0" layoutY="27.0" onInputMethodTextChanged="#searchBarInput" prefHeight="98.0" prefWidth="506.0" promptText="Search">
                <font>
                   <Font size="51.0" />
                </font>
@@ -81,14 +88,36 @@
                   <Font size="24.0" />
                </font>
             </Text>
-            <JFXComboBox fx:id="categoriesDrawer" focusColor="#654426" layoutX="185.0" layoutY="196.0" onShowing="#initializeCategoriesDrawer" prefHeight="27.0" prefWidth="197.0" promptText="none" />
+            <JFXComboBox fx:id="categoriesDrawer" focusColor="#654426" layoutX="185.0" layoutY="196.0"  prefHeight="27.0" prefWidth="197.0" promptText="none">
+               <items>
+                  <FXCollections fx:factory="observableArrayList">
+                     <String fx:value="Espresso" />
+                     <String fx:value="Italiana" />
+                     <String fx:value="Automatica" />
+                  </FXCollections>
+               </items>
+            </JFXComboBox>
             <JFXButton fx:id="applyCategories" layoutX="426.0" layoutY="196.0" onAction="#applyCategoriesButton" prefHeight="32.0" prefWidth="88.0" style="-fx-background-color: #DDD;" text="Apply" />
             <Text fill="#3c3c3c" layoutX="31.0" layoutY="275.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Brands" wrappingWidth="140.59824858261032">
                <font>
                   <Font size="24.0" />
                </font>
             </Text>
-            <JFXComboBox fx:id="BrandsDrawer" focusColor="#654426" layoutX="185.0" layoutY="253.0" prefHeight="27.0" prefWidth="197.0" promptText="none" />
+            <JFXComboBox fx:id="BrandsDrawer" focusColor="#654426" layoutX="185.0" layoutY="253.0" prefHeight="27.0" prefWidth="197.0" promptText="none">
+               <items>
+                  <FXCollections fx:factory="observableArrayList">
+                     <String fx:value="De'longhi" />
+                     <String fx:value="Krups" />
+                     <String fx:value="Electrolux" />
+                     <String fx:value="Philips" />
+                     <String fx:value="Proline" />
+                     <String fx:value="Bialetti" />
+                     <String fx:value="Taurus" />
+                     <String fx:value="Bosch" />
+                     <String fx:value="Tassimo" />
+                  </FXCollections>
+               </items>
+            </JFXComboBox>
             <JFXButton fx:id="brandButton" layoutX="427.0" layoutY="253.0" onAction="#applyBrandButton" prefHeight="32.0" prefWidth="88.0" style="-fx-background-color: #DDD;" text="Apply" />
             <Text fill="#3c3c3c" layoutX="33.0" layoutY="431.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Only show results for:" wrappingWidth="249.5541714181137">
                <font>
@@ -97,8 +126,9 @@
             </Text>
             <JFXToggleButton fx:id="fnacSwitch" layoutX="43.0" layoutY="460.0" onAction="#changeFnacSwitch" prefHeight="124.0" prefWidth="240.0" text="FNAC" toggleColor="#8f5e00" toggleLineColor="#a48d5e" />
             <JFXToggleButton fx:id="ElCorteInglesSwitch" layoutX="311.0" layoutY="462.0" onAction="#changeElCorteInglesSwitch" prefHeight="124.0" prefWidth="217.0" text="El Corte Inglés" toggleColor="#8f5e00" toggleLineColor="#a48d5e" />
-            <Text fill="#282828" layoutX="32.0" layoutY="695.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Too search for product, click enter after entering search paramter or click search at the bottom of the view" wrappingWidth="556.0841699378965" />
-            <JFXButton onAction="#findProducts" layoutX="425.0" layoutY="599.0" prefHeight="42.0" prefWidth="91.0" style="-fx-background-color: #DDD;" text="Search" />
+            <Text fill="#282828" layoutX="32.0" layoutY="682.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Too search for any product, click search at the bottom of the view" wrappingWidth="487.83557374649024" />
+            <JFXButton layoutX="425.0" layoutY="599.0" onAction="#findProducts" prefHeight="42.0" prefWidth="91.0" style="-fx-background-color: #DDD;" text="Search" />
+            <JFXDrawer layoutX="211.0" layoutY="336.0" />
          </children>
       </Pane>
    </children>
