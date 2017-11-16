@@ -13,7 +13,7 @@ public class BoostreatorApp extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        String resourcePath = "/view/SearchView.fxml";
+        String resourcePath = "/SearchView.fxml";
         URL location = getClass().getResource(resourcePath);
         FXMLLoader loader = new FXMLLoader(location);
 
