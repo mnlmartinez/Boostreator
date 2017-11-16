@@ -13,10 +13,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -44,7 +44,7 @@ public class SearchViewController implements Initializable {
     private List<Brand> brands = new ArrayList<>();
 
     @FXML
-    private JFXSpinner loadCircle;
+    private JFXSpinner loadingSpinner;
 
     @FXML
     private Text loadText;
@@ -92,6 +92,7 @@ public class SearchViewController implements Initializable {
         this.initializeCategoriesDrawer();
         this.initializeColumns();
         this.initializeListeners();
+        this.hideSpinner();
     }
 
 
@@ -116,6 +117,7 @@ public class SearchViewController implements Initializable {
     }
 
     private void launchThread() {
+        showSpinner();
         new Thread(new Task<Void>() {
             @Override
             protected Void call() throws Exception {
@@ -133,8 +135,18 @@ public class SearchViewController implements Initializable {
             @Override
             protected void succeeded() {
                 searchButton.setDisable(false);
+                hideSpinner();
+
             }
         }).start();
+    }
+
+    private void showSpinner(){
+        loadingSpinner.setVisible(true);
+    }
+
+    private void hideSpinner(){
+        loadingSpinner.setVisible(false);
     }
 
     private void initializeBrandsDrawer() {
@@ -205,6 +217,7 @@ public class SearchViewController implements Initializable {
         title.setY(30.0);
         title.setX(20.0);
         title.setFont(Font.font(16));
+        title.setStroke(Paint.valueOf("#754d2d"));
 
         Text brand = new Text("Brand:  " + ((p.getBrand() == null) ? "" : p.getBrand().name()));
         brand.setY(60.0);
@@ -232,7 +245,7 @@ public class SearchViewController implements Initializable {
         priceFNAC.setY(180.0);
         priceFNAC.setX(20.0);
 
-        Scene scene = new Scene(new Group(title, brand, model, types, priceECI, priceFNAC), 550, 200);
+        Scene scene = new Scene(new Group(title, brand, model, types, priceECI, priceFNAC), 650, 200);
         dialog.setScene(scene);
         dialog.show();
     }

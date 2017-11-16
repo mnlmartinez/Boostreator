@@ -4,6 +4,7 @@
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXDrawer?>
 <?import com.jfoenix.controls.JFXSlider?>
+<?import com.jfoenix.controls.JFXSpinner?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import com.jfoenix.controls.JFXToggleButton?>
 <?import javafx.collections.FXCollections?>
@@ -63,12 +64,12 @@
          <children>
             <Pane layoutX="500.0" layoutY="-11.0" prefHeight="731.0" prefWidth="588.0" style="-fx-background-color: #1c1c1c;">
                <children>
-                  <Text fill="WHITE" layoutX="39.0" layoutY="52.0" strokeType="OUTSIDE" strokeWidth="0.0" text="RESULTS">
+                  <Text fill="WHITE" layoutX="16.0" layoutY="52.0" strokeType="OUTSIDE" strokeWidth="0.0" text="RESULTS">
                      <font>
                         <Font size="25.0" />
                      </font>
                   </Text>
-                  <TableView fx:id="resultsListView" layoutY="70.0"  prefHeight="657.0" prefWidth="587.0" style="-fx-background-color: #1c1c1c1c;">
+                  <TableView fx:id="resultsListView" layoutY="70.0" prefHeight="636.0" prefWidth="587.0" style="-fx-background-color: #1c1c1c1c;">
                     <columns>
                       <TableColumn fx:id="brandColumn" prefWidth="90.0" text="Brand" />
                       <TableColumn fx:id="modelColumn" prefWidth="225.823486328125" text="Model" />
@@ -81,6 +82,7 @@
                         </TableColumn>
                     </columns>
                   </TableView>
+                  <Text fill="WHITE" layoutX="25.0" layoutY="720.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Double click on any product to see the full description" wrappingWidth="529.3023071289062" />
                </children>
             </Pane>
             <JFXTextField fx:id="searchBox" editable="false" focusColor="#754d2d" layoutX="18.0" layoutY="17.0" prefHeight="108.0" prefWidth="449.0" promptText="Search...">
@@ -118,7 +120,7 @@
             <JFXToggleButton layoutX="43.0" layoutY="493.0" onAction="#changeFnacSwitch" prefHeight="88.0" prefWidth="148.0" text="FNAC" toggleColor="#8f5e00" toggleLineColor="#a48d5e" />
             <JFXToggleButton layoutX="205.0" layoutY="492.0" onAction="#changeEciSwitch" prefHeight="89.0" prefWidth="167.0" text="El Corte Inglés" toggleColor="#8f5e00" toggleLineColor="#a48d5e" />
             <Text fill="#282828" layoutX="47.0" layoutY="681.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Too search for any product, click the search button" wrappingWidth="408.48193605117774" />
-            <JFXButton layoutX="363.0" layoutY="602.0" fx:id="searchButton" onAction="#search" prefHeight="42.0" prefWidth="91.0" style="-fx-background-color: #DDD;" text="Search" />
+            <JFXButton fx:id="searchButton" layoutX="363.0" layoutY="602.0" onAction="#search" prefHeight="42.0" prefWidth="91.0" style="-fx-background-color: #DDD;" text="Search" />
             <JFXDrawer layoutX="211.0" layoutY="336.0" />
             <Text fill="#3c3c3c" layoutX="30.0" layoutY="351.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Limit" wrappingWidth="143.9544384133261">
                <font>
@@ -126,6 +128,7 @@
                </font>
             </Text>
             <JFXSlider fx:id="sliderLimit" blockIncrement="5.0" layoutX="182.0" layoutY="339.0" majorTickUnit="10.0" max="65.0" min="5.0" prefHeight="15.0" prefWidth="202.0" showTickLabels="true" showTickMarks="true" value="35.0" />
+            <JFXSpinner fx:id="loadingSpinner" layoutX="763.0" layoutY="342.0" />
          </children>
       </Pane>
    </children>
