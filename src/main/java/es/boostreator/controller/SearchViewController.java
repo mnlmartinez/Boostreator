@@ -1,5 +1,4 @@
-package es.boostreator.view;
-
+package es.boostreator.controller;
 
 import com.jfoenix.controls.*;
 import es.boostreator.domain.model.Product;
@@ -13,9 +12,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
+import javafx.scene.control.TableView;
 import javafx.scene.input.MouseButton;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -36,9 +36,9 @@ public class SearchViewController implements Initializable {
 
     // Switch
     @FXML
-    private boolean fnacSwitch = false;
+    private boolean fnacSwitch = true;
 
-    private boolean eciSwitch = false;
+    private boolean eciSwitch = true;
 
     private List<Site> sites = new ArrayList<>();
     private List<Brand> brands = new ArrayList<>();
@@ -141,11 +141,11 @@ public class SearchViewController implements Initializable {
         }).start();
     }
 
-    private void showSpinner(){
+    private void showSpinner() {
         loadingSpinner.setVisible(true);
     }
 
-    private void hideSpinner(){
+    private void hideSpinner() {
         loadingSpinner.setVisible(false);
     }
 
@@ -207,6 +207,9 @@ public class SearchViewController implements Initializable {
         }
         if (eciSwitch) sites.add(Site.ELCORTEINGLES);
         if (fnacSwitch) sites.add(Site.FNAC);
+
+        brands = new ArrayList<>();
+        brands.add(brandsDrawer.getSelectionModel().getSelectedItem());
     }
 
     private void showDialog(Product p) {

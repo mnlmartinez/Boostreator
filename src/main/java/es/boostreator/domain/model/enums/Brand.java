@@ -1,6 +1,7 @@
 package es.boostreator.domain.model.enums;
 
 
+import java.text.Normalizer;
 import java.util.Arrays;
 import java.util.List;
 
@@ -15,6 +16,7 @@ public enum Brand {
     TECNHOGAR(new Site[]{Site.FNAC, Site.ELCORTEINGLES}),
     BODUM(new Site[]{Site.FNAC, Site.ELCORTEINGLES}),
     ELCORTEINGLES(new Site[]{Site.ELCORTEINGLES}),
+    SOLAC(new Site[]{Site.ELCORTEINGLES}),
     MELITTA(new Site[]{Site.FNAC}),
     BIALETTI(new Site[]{Site.FNAC}),
     ORBEGOZO(new Site[]{Site.FNAC}),
@@ -23,6 +25,9 @@ public enum Brand {
     SIEMENS(new Site[]{Site.FNAC}),
     CLATRONIC(new Site[]{Site.FNAC}),
     SENSEO(new Site[]{Site.FNAC}),
+    ELECTROLUX(new Site[]{Site.FNAC}),
+    MOULINEX(new Site[]{Site.FNAC}),
+    OSTER(new Site[]{Site.FNAC}),
     JURA(new Site[]{Site.FNAC}),
     PROLINE(new Site[]{Site.FNAC}),
     SAIVOD(new Site[]{Site.ELCORTEINGLES}),
@@ -66,11 +71,13 @@ public enum Brand {
 
     public static Brand getByProductTitle(String text) {
         Brand[] brands = Brand.values();
-        text = text
+        text = Normalizer
+                .normalize(text, Normalizer.Form.NFD)
                 .trim()
                 .toUpperCase()
                 .replace("'", "")
-                .replace(" ", "");
+                .replace(" ", "")
+                .replaceAll("[^\\p{ASCII}]", "");
         try {
             for (Brand brand : brands) if (text.contains(brand.name())) return brand;
         } catch (IllegalArgumentException ignored) {

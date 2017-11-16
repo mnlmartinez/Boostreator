@@ -2,13 +2,10 @@ package es.boostreator;
 
 import es.boostreator.util.AppLogger;
 import es.boostreator.util.DriverFactory;
-import es.boostreator.view.SearchViewController;
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 import java.net.URL;
 
