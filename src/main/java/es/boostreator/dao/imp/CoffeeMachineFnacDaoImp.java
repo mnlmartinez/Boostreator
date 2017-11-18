@@ -139,8 +139,10 @@ public class CoffeeMachineFnacDaoImp implements CoffeeMachineSiteDao {
     }
 
     private void waitPageLoad() {
+        int max = 5;
+        int count = 0;
         try {
-            while (true) {
+            while (count < max++) {
                 Thread.sleep(1000);
                 if ((Boolean) ((JavascriptExecutor) driver.getDriver())
                         .executeScript("return jQuery.active == 0")) break;

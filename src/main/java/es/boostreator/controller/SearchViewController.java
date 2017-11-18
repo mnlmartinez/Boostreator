@@ -118,7 +118,7 @@ public class SearchViewController implements Initializable {
 
     private void launchThread() {
         showSpinner();
-        new Thread(new Task<Void>() {
+        Thread t = new Thread(new Task<Void>() {
             @Override
             protected Void call() throws Exception {
                 String selected = categoriesDrawer.getSelectionModel().getSelectedItem();
@@ -138,7 +138,9 @@ public class SearchViewController implements Initializable {
                 hideSpinner();
 
             }
-        }).start();
+        });
+        t.start();
+        Runtime.getRuntime().addShutdownHook(new Thread(t::stop));
     }
 
     private void showSpinner() {
@@ -159,8 +161,7 @@ public class SearchViewController implements Initializable {
                 "Manual",
                 "Espresso",
                 "Italiana",
-                "Goteo",
-                "Cápsulas"
+                "Goteo"
         );
     }
 

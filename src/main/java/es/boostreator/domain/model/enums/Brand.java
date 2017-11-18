@@ -22,6 +22,7 @@ public enum Brand {
     ORBEGOZO(new Site[]{Site.FNAC}),
     NESCAFE(new Site[]{Site.FNAC}),
     TASSIMO(new Site[]{Site.FNAC}),
+    KENWOOD(new Site[]{Site.FNAC}),
     SIEMENS(new Site[]{Site.FNAC}),
     CLATRONIC(new Site[]{Site.FNAC}),
     SENSEO(new Site[]{Site.FNAC}),
